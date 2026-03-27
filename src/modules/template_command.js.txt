@@ -1,0 +1,284 @@
+/**
+ * TEMPLATE MODULE - FILE MẪU ĐẦY ĐỦ
+ * Sao chép file này và đổi tên để tạo module mới.
+ *
+ * Cách dùng:
+ *   1. Copy file này → đổi tên thành ten_module.js
+ *   2. Sửa: name, description, commands
+ *   3. Xóa bỏ những phần không cần
+ *   Bot sẽ tự động load mà không cần sửa file nào khác.
+ */
+
+// ─── Import (chỉ import những gì bạn cần) ────────────────────────────────────
+
+import { fs, path, axios, log } from "../globals.js";
+// import { groupAdminManager } from "../utils/managers/groupAdminManager.js";
+// import https from "node:https";
+// import http from "node:http";
+
+// ─── Thông tin module (BẮT BUỘC) ─────────────────────────────────────────────
+
+export const name = "template";
+export const description = "Mô tả module của bạn ở đây";
+
+// ─── Lưu trữ dữ liệu JSON (tuỳ chọn) ────────────────────────────────────────
+
+const DATA_FILE = path.join(process.cwd(), "src/modules/cache/template.json");
+
+function loadData() {
+    try {
+        if (!fs.existsSync(DATA_FILE)) return {};
+        return JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
+    } catch {
+        return {};
+    }
+}
+
+function saveData(data) {
+    const dir = path.dirname(DATA_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+}
+
+// ─── Cooldown riêng (tuỳ chọn) ───────────────────────────────────────────────
+
+const cooldowns = new Map();
+const COOLDOWN_MS = 10_000; // 10 giây
+
+function checkCooldown(senderId) {
+    const now = Date.now();
+    const last = cooldowns.get(senderId) || 0;
+    const remaining = Math.ceil((COOLDOWN_MS - (now - last)) / 1000);
+    if (now - last < COOLDOWN_MS) return remaining; // Còn trong cooldown
+    cooldowns.set(senderId, now);
+    return 0; // Đã hết cooldown
+}
+
+// ─── COMMANDS (BẮT BUỘC) ─────────────────────────────────────────────────────
+//
+// Mỗi key trong object là một lệnh.
+// Người dùng gõ: !tenlenh [tham số...]
+// Tên lệnh phải viết thường, không dấu.
+
+export const commands = {
+
+    // ── Lệnh cơ bản ──────────────────────────────────────────────────────────
+    template: async (ctx) => {
+        const {
+            api,
+            threadId,
+            threadType,
+            isGroup,
+            senderId,
+            senderName,
+            adminIds,
+            args,
+            message,
+            reply,
+        } = ctx;
+
+        // Ví dụ: kiểm tra chỉ dùng trong nhóm
+        if (!isGroup) {
+            return api.sendMessage({ msg: "⚠️ Lệnh này chỉ dùng được trong nhóm!" }, threadId, threadType);
+        }
+
+        // Ví dụ: kiểm tra quyền admin bot
+        if (!adminIds.includes(String(senderId))) {
+            return api.sendMessage({ msg: "❌ Bạn không có quyền dùng lệnh này!" }, threadId, threadType);
+        }
+
+        // Ví dụ: kiểm tra cooldown
+        const wait = checkCooldown(senderId);
+        if (wait > 0) {
+            return api.sendMessage({ msg: `⏳ Vui lòng chờ ${wait}s trước khi dùng lại!` }, threadId, threadType);
+        }
+
+        // Ví dụ: đọc tham số
+        if (args.length === 0) {
+            return api.sendMessage({
+                msg: `❓ Cách dùng: !template [tham số]\nVí dụ: !template xin chào`
+            }, threadId, threadType);
+        }
+
+        const input = args.join(" ");
+
+        // Gửi tin nhắn đơn giản
+        await api.sendMessage({ msg: `✅ Bạn nhập: ${input}` }, threadId, threadType);
+    },
+
+    // ── Lệnh alias (nhiều tên cùng chạy một hàm) ─────────────────────────────
+    tpl: async (ctx) => {
+        return ctx.commands?.template?.(ctx); // Gọi lại lệnh chính (xem cách bên dưới)
+    },
+
+    // ── Lệnh có sub-command ───────────────────────────────────────────────────
+    quanly: async (ctx) => {
+        const { api, threadId, threadType, args, senderId, adminIds } = ctx;
+
+        if (!adminIds.includes(String(senderId))) {
+            return api.sendMessage({ msg: "❌ Chỉ Admin mới dùng được!" }, threadId, threadType);
+        }
+
+        const sub = (args[0] || "").toLowerCase();
+
+        if (sub === "on") {
+            const data = loadData();
+            data[threadId] = { enabled: true };
+            saveData(data);
+            return api.sendMessage({ msg: "✅ Đã bật tính năng cho nhóm này." }, threadId, threadType);
+        }
+
+        if (sub === "off") {
+            const data = loadData();
+            delete data[threadId];
+            saveData(data);
+            return api.sendMessage({ msg: "🚫 Đã tắt tính năng cho nhóm này." }, threadId, threadType);
+        }
+
+        if (sub === "status") {
+            const data = loadData();
+            const isEnabled = !!data[threadId]?.enabled;
+            return api.sendMessage({ msg: `📊 Trạng thái: ${isEnabled ? "✅ Đang bật" : "❌ Đang tắt"}` }, threadId, threadType);
+        }
+
+        // Không khớp sub-command nào
+        return api.sendMessage({
+            msg: `❓ Cách dùng:\n!quanly on — Bật\n!quanly off — Tắt\n!quanly status — Xem trạng thái`
+        }, threadId, threadType);
+    },
+
+    // ── Lệnh gửi ảnh từ URL ───────────────────────────────────────────────────
+    anhvidu: async (ctx) => {
+        const { api, threadId, threadType } = ctx;
+
+        try {
+            await api.sendMessage({ msg: "⏳ Đang tải ảnh..." }, threadId, threadType);
+
+            const imageUrl = "https://picsum.photos/800/600"; // URL ảnh ngẫu nhiên
+            const tmpFile = path.join(process.cwd(), `tmp_img_${Date.now()}.jpg`);
+
+            // Download ảnh về máy
+            const res = await axios.get(imageUrl, { responseType: "arraybuffer" });
+            fs.writeFileSync(tmpFile, Buffer.from(res.data));
+
+            try {
+                await api.sendMessage({ msg: "", attachments: [tmpFile] }, threadId, threadType);
+            } finally {
+                if (fs.existsSync(tmpFile)) fs.unlinkSync(tmpFile); // Xóa file tạm
+            }
+        } catch (e) {
+            await api.sendMessage({ msg: `❌ Lỗi: ${e.message}` }, threadId, threadType);
+        }
+    },
+
+    // ── Lệnh tag @mention người dùng ─────────────────────────────────────────
+    chao: async (ctx) => {
+        const { api, threadId, threadType, senderId, senderName } = ctx;
+
+        const msg = `Xin chào @${senderName}! Chúc bạn một ngày vui vẻ 🎉`;
+
+        await api.sendMessage({
+            msg,
+            mentions: [{
+                uid: String(senderId),
+                pos: msg.indexOf("@" + senderName),
+                len: senderName.length + 1
+            }]
+        }, threadId, threadType);
+    },
+
+    // ── Lệnh tag toàn bộ nhóm ────────────────────────────────────────────────
+    tagall: async (ctx) => {
+        const { api, threadId, threadType, isGroup, senderId, adminIds } = ctx;
+
+        if (!isGroup) return;
+        if (!adminIds.includes(String(senderId))) {
+            return api.sendMessage({ msg: "❌ Chỉ Admin mới được tag all!" }, threadId, threadType);
+        }
+
+        const msg = "[ 📣 THÔNG BÁO TOÀN NHÓM ]";
+        await api.sendMessage({
+            msg,
+            mentions: [{ uid: "-1", pos: 0, len: msg.length }]
+        }, threadId, threadType);
+    },
+
+    // ── Lệnh gọi API ngoài ───────────────────────────────────────────────────
+    apividu: async (ctx) => {
+        const { api, threadId, threadType, args } = ctx;
+
+        const query = args.join(" ") || "mèo";
+
+        try {
+            await api.sendMessage({ msg: `⏳ Đang tra cứu: ${query}...` }, threadId, threadType);
+
+            const res = await axios.get(`https://api.example.com/search?q=${encodeURIComponent(query)}`);
+            const data = res.data;
+
+            await api.sendMessage({ msg: `✅ Kết quả: ${data?.result || "Không có kết quả"}` }, threadId, threadType);
+        } catch (e) {
+            await api.sendMessage({ msg: `❌ Lỗi khi gọi API: ${e.message}` }, threadId, threadType);
+        }
+    },
+
+};
+
+// ─── EVENT HANDLERS (tuỳ chọn – xóa nếu không dùng) ─────────────────────────
+
+/**
+ * handle() – Chạy với MỌI tin nhắn (trước khi kiểm tra lệnh).
+ * Trả về true nếu đã xử lý (bot sẽ không xử lý lệnh nữa).
+ * Trả về false nếu không xử lý (tiếp tục xử lý bình thường).
+ */
+export async function handle(ctx) {
+    const { content, api, threadId, threadType, isSelf } = ctx;
+
+    if (isSelf) return false;
+    if (!content) return false;
+
+    // Ví dụ: phản hồi khi ai đó nói "good bot"
+    if (content.toLowerCase() === "good bot") {
+        await api.sendMessage({ msg: "Cảm ơn bạn! 🥰" }, threadId, threadType);
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * handleReaction() – Chạy khi ai đó react vào tin nhắn.
+ */
+export async function handleReaction(ctx) {
+    const { api, threadId, threadType, senderName } = ctx;
+    const { rIcon } = ctx.message?.data || {};
+
+    if (rIcon === "❤️") {
+        log.info(`[template] ${senderName} thả tim!`);
+        // await api.sendMessage({ msg: `${senderName} thả tim rồi! 💖` }, threadId, threadType);
+    }
+}
+
+/**
+ * handleGroupEvent() – Chạy khi có sự kiện nhóm (thêm/xóa thành viên,...).
+ */
+export async function handleGroupEvent(ctx) {
+    const { api, threadId, threadType } = ctx;
+    const groupEventData = ctx.message?.data?.groupEventData;
+    if (!groupEventData) return;
+
+    const members = groupEventData.updateMembers || [];
+    const joined = members.filter(m => m.type === 1);
+    const left = members.filter(m => m.type === 0);
+
+    for (const m of joined) {
+        await api.sendMessage({
+            msg: `🎉 Chào mừng ${m.dName} đã gia nhập nhóm!`
+        }, threadId, threadType);
+    }
+
+    for (const m of left) {
+        await api.sendMessage({
+            msg: `👋 ${m.dName} đã rời nhóm.`
+        }, threadId, threadType);
+    }
+}

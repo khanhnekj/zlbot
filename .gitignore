@@ -1,0 +1,22 @@
+# Credentials / tokens
+token_launa.json
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Temp & cache
+src/modules/cache/temp/
+src/utils/canvas/temp/
+attached_assets/
+
+# Replit internals
+.replit
+replit.nix
+.cache/
+.upm/
+.local/
+.agents/
+.config/
+.env
+config.json

@@ -1,0 +1,140 @@
+{
+  "9176300605344420664": {
+    "members": {
+      "6024931307373526012": {
+        "name": "Đặng Lịnh",
+        "total": 246,
+        "day": 129,
+        "week": 246,
+        "joinDate": 1774376506625,
+        "role": "Admin"
+      },
+      "1669731236676931404": {
+        "name": "A Di Đà Phật",
+        "total": 18,
+        "day": 9,
+        "week": 18,
+        "joinDate": 1774424905053,
+        "role": "Thành viên"
+      },
+      "5335997498648032109": {
+        "name": "Ng Văn Hưng",
+        "total": 24,
+        "day": 12,
+        "week": 24,
+        "joinDate": 1774429423512,
+        "role": "Admin"
+      },
+      "8009347465992207686": {
+        "name": "V Tuấn",
+        "total": 1,
+        "day": 0,
+        "week": 1,
+        "joinDate": 1774430485489,
+        "role": "Admin"
+      },
+      "359867629617598110": {
+        "name": "Tie Tie",
+        "total": 76,
+        "day": 54,
+        "week": 76,
+        "joinDate": 1774454012529,
+        "role": "Admin"
+      },
+      "6215915355277074723": {
+        "name": "Dang Gia Khanh",
+        "total": 90,
+        "day": 63,
+        "week": 90,
+        "joinDate": 1774454012837,
+        "role": "Admin"
+      },
+      "5641826312517890347": {
+        "name": "Mei",
+        "total": 82,
+        "day": 75,
+        "week": 82,
+        "joinDate": 1774454081499,
+        "role": "Thành viên"
+      },
+      "1635389426252288210": {
+        "name": "Bùi Văn Đạt",
+        "total": 6,
+        "day": 6,
+        "week": 6,
+        "joinDate": 1774503243050,
+        "role": "Admin"
+      },
+      "7700432593083401149": {
+        "name": "Minh Vũ Shinn Cteツ",
+        "total": 10,
+        "day": 10,
+        "week": 10,
+        "joinDate": 1774504820754,
+        "role": "Thành viên"
+      },
+      "1051734906862609144": {
+        "name": "Shinn",
+        "total": 2,
+        "day": 2,
+        "week": 2,
+        "joinDate": 1774504870751,
+        "role": "Admin"
+      },
+      "5577225479472062214": {
+        "name": "Quốc Khánh",
+        "total": 3,
+        "day": 3,
+        "week": 3,
+        "joinDate": 1774506065936,
+        "role": "Thành viên"
+      },
+      "2032412539909151828": {
+        "name": "Xuan Bach",
+        "total": 5,
+        "day": 5,
+        "week": 5,
+        "joinDate": 1774507186871,
+        "role": "Admin"
+      }
+    },
+    "lastResetDay": 26,
+    "lastResetWeek": 13
+  },
+  "2480105366650289419": {
+    "members": {
+      "6024931307373526012": {
+        "name": "Đặng Lịnh",
+        "total": 12,
+        "day": 12,
+        "week": 12,
+        "joinDate": 1774454045441,
+        "role": "Admin"
+      }
+    },
+    "lastResetDay": 25,
+    "lastResetWeek": 13
+  },
+  "9021491468643662674": {
+    "members": {
+      "6024931307373526012": {
+        "name": "Đặng Lịnh",
+        "total": 2,
+        "day": 2,
+        "week": 2,
+        "joinDate": 1774502773275,
+        "role": "Admin"
+      },
+      "2734581352907727507": {
+        "name": "Mạnh Lâm",
+        "total": 3,
+        "day": 3,
+        "week": 3,
+        "joinDate": 1774502795967,
+        "role": "Thành viên"
+      }
+    },
+    "lastResetDay": 26,
+    "lastResetWeek": 13
+  }
+}
