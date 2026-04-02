@@ -6,9 +6,9 @@
     "adminOnly": true
   },
   "credentials": {
-    "imei": "899924cd-9f44-4da5-bf55-8d8e1b724bf0-7675d59b5e84e0a878ee6f0a97f9056f",
-    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-    "cookies": "nl_b04af40bb0e193acf8a9877592394ada=tzaoLC8i6ltAq35JnYmO-ipRC4ZHUd-_dTmI0penVG; zpdid=4HttdLtvg3KH792QK_x4DXOOa9XK-C0q; zlogin_session=kW4JGLyjCnIxFnDDLXTbH-Tj1aHL4657vMePLGnNRr-kAnLQ6qXpMAmh5Lat8dq; _zlang=vn; zpsid=eMKnVcAlVqAZUYmFRfDd7E8TR4nnacKNvnzrJ6kLEt2C5sjGJUSsGzi5GquDY19zwc0QJWIS4Nh54s5ZDv1kTk9dFYq8jL80Xq4ABMRFLX-S0LyPNV425m; zlogtype=EXPIRED; __zi=3000.QOBlzDCV2uGerkFzm0LJqcNNuVR51nZRPjUkzS836DXbrANs.1; zpw_sek=Tk6o.453157847.a0.mM8zbI7XVBVsGdwi0E5yjrh36Tm3srx4QTaxxqQGFTjCqpY7GBO8ra3N9V9Mt46LNE1BLFWC16o1u0nOaOXyjm; app.event.zalo.me=7713100542915103875; Path=/; Domain=.chat.zalo.me; Expires=Wed, 25-Mar-2026 18:15:44 GMT; HttpOnly=; Max-Age=7775698; Secure=; SameSite=Lax"
+    "imei": "95fbcd3a-ea93-4529-b057-f42b112a252e-3090a376b3015855b898100772c30da9",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
+    "cookies": "zpw_sek=dn2O.448171806.a0.8_dLpZG5QLCgYjz95GLfKqyd33WMFqir1J4m1dXt9Z9-K20PM50Y1Njp33jbE5HnISf7is_M3WqR1F54-cnfKm"
   },
   "admin": {
     "ids": [

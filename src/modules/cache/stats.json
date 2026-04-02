@@ -1,0 +1,24 @@
+{
+  "4295767469574084496": {
+    "members": {
+      "4628544535841016374": {
+        "name": "Tie Tie",
+        "total": 5,
+        "day": 5,
+        "week": 5,
+        "joinDate": 1775114185061,
+        "role": "Admin"
+      },
+      "1682584924148023124": {
+        "name": "Đặng Lịnh",
+        "total": 1,
+        "day": 1,
+        "week": 1,
+        "joinDate": 1775114353188,
+        "role": "Thành viên"
+      }
+    },
+    "lastResetDay": 2,
+    "lastResetWeek": 14
+  }
+}
